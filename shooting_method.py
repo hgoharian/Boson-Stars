@@ -101,11 +101,11 @@ y0 = [1, alpha0 ,phi0,0]
 sol = spi.odeint(eqns, y0, r)
 
 
-plt.plot(r, sol[:, 0], 'b', label='a(t)')
-plt.plot(r, sol[:, 1], 'g', label='alpha(t)')
-plt.plot(r, sol[:, 2]+1, 'r', label='phi(t)')
+plt.plot(r, sol[:, 0], 'b', label='a(r)')
+plt.plot(r, sol[:, 1], 'g', label='alpha(r)')
+plt.plot(r, sol[:, 2]+1, 'r', label='phi(r)')
 plt.legend(loc='best')
-plt.xlabel('t')
+plt.xlabel('r')
 plt.grid()
 
 
