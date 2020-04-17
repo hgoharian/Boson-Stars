@@ -2,7 +2,7 @@ import numpy as np
 import scipy.integrate as spi
 import scipy.optimize as opi
 import matplotlib 
-matplotlib.use("agg")
+
 
 import matplotlib.pyplot as plt
 
@@ -20,6 +20,8 @@ def eqns(y, r):
     m = 1 
     a, alpha, phi, pi = y
 
+    omega = 1
+    
     dadr = a/(2.0)*( -(a**2-1.0)/r + 4.0*np.pi*r*(1.0/alpha**2+m**2)*a**2*phi**2+ pi**2 )
     dalphadr = alpha/(2.0) * ( (a**2-1.0)/r + 4.0*np.pi*r*(1.0/alpha**2 - m**2)*a**2*phi**2+pi**2 ) 
     dphidr = pi 
@@ -68,10 +70,11 @@ def radial_walker(alpha0_guess,phi0,rstart,rend,deltaR,N):
     eps = 1e-10 # distance from zero
     range_list = np.arange(rstart,rend,deltaR)
     alpha0 = alpha0_guess
-
+    print(range_list)
+    print(alpha0_guess)
     for R in range_list:
         r = np.linspace(eps, R, N)
-
+        print(r)
         fun = lambda x: shoot(x,phi0,r)
         root = opi.root(fun,alpha0)
         alpha0 = root.x 
@@ -99,7 +102,8 @@ alpha0 = radial_walker(0.72,phi0,Rstart,Rend,deltaR,N)
 r = np.linspace(1e-10, Rend, N)
 y0 = [1, alpha0 ,phi0,0]
 sol = spi.odeint(eqns, y0, r)
-
+print(y0)
+print(sol)
 
 plt.plot(r, sol[:, 0], 'b', label='a(r)')
 plt.plot(r, sol[:, 1], 'g', label='alpha(r)')
@@ -109,4 +113,4 @@ plt.xlabel('r')
 plt.grid()
 
 
-plt.savefig("test.png")
+plt.savefig("solution.png")
