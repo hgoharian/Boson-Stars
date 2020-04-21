@@ -89,9 +89,7 @@ def radial_walker(alpha0_guess,phi0,rstart,rend,deltaR,N):
 
 
  
-for phi0 in np.arange(0.11,0.14,0.01):
-    print(phi0)
-    
+#phi0 = 0.13    
 # Resolution of diff eqn 
 Rstart = 4
 Rend = 20
@@ -103,8 +101,12 @@ alpha0 = radial_walker(0.72,phi0,Rstart,Rend,deltaR,N)
 # Root finding ( values for which 
 
 r = np.linspace(1e-10, Rend, N)
-y0 = [1, alpha0 ,phi0,0]
-sol = spi.odeint(eqns, y0, r)
+
+for phi0 in np.arange(0.11,0.14,0.01):
+    y0 = [1, alpha0 ,phi0,0]
+    sol = spi.odeint(eqns, y0, r)
+    print(sol)
+    
 a = sol[:, 0]
 alpha = sol[:, 1]
 phi = sol[:, 2]+1
