@@ -2,7 +2,7 @@ import numpy as np
 import scipy.integrate as spi
 import scipy.optimize as opi
 import matplotlib 
-
+import csv
 
 import matplotlib.pyplot as plt
 
@@ -70,11 +70,11 @@ def radial_walker(alpha0_guess,phi0,rstart,rend,deltaR,N):
     eps = 1e-10 # distance from zero
     range_list = np.arange(rstart,rend,deltaR)
     alpha0 = alpha0_guess
-    print(range_list)
-    print(alpha0_guess)
+    #print(range_list)
+    #print(alpha0_guess)
     for R in range_list:
         r = np.linspace(eps, R, N)
-        print(r)
+        #print(r)
         fun = lambda x: shoot(x,phi0,r)
         root = opi.root(fun,alpha0)
         alpha0 = root.x 
@@ -88,7 +88,10 @@ def radial_walker(alpha0_guess,phi0,rstart,rend,deltaR,N):
 # spaced times between t=0 and t=3.
 
 
-phi0 = 0.12
+ 
+for phi0 in np.arange(0.11,0.14,0.01):
+    print(phi0)
+    
 # Resolution of diff eqn 
 Rstart = 4
 Rend = 20
@@ -102,12 +105,16 @@ alpha0 = radial_walker(0.72,phi0,Rstart,Rend,deltaR,N)
 r = np.linspace(1e-10, Rend, N)
 y0 = [1, alpha0 ,phi0,0]
 sol = spi.odeint(eqns, y0, r)
-print(y0)
-print(sol)
+a = sol[:, 0]
+alpha = sol[:, 1]
+phi = sol[:, 2]+1
+M = r / 2.0*(a**2 - 1.0) / a**2
 
-plt.plot(r, sol[:, 0], 'b', label='a(r)')
-plt.plot(r, sol[:, 1], 'g', label='alpha(r)')
-plt.plot(r, sol[:, 2]+1, 'r', label='phi(r)')
+
+plt.plot(r, a, 'b', label='a(r)')
+plt.plot(r, M, 'y', label='M(r)')
+plt.plot(r, alpha, 'g', label='alpha(r)')
+plt.plot(r, phi, 'r', label='phi(r)')
 plt.legend(loc='best')
 plt.xlabel('r')
 plt.grid()
