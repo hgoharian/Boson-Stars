@@ -17,15 +17,12 @@ def eqns(y, r):
         dydr (list with reals): derivative for y in r 
 
     """
-    m = 1 
     a, alpha, phi, pi = y
 
-    omega = 2
-    
-    dadr = a/(2.0)*( -(a**2-1.0)/r + 4.0*np.pi*r*(1.0/alpha**2+m**2)*a**2*phi**2+ pi**2 )
-    dalphadr = alpha/(2.0) * ( (a**2-1.0)/r + 4.0*np.pi*r*(1.0/alpha**2 - m**2)*a**2*phi**2+pi**2 ) 
+    dadr = a/(2.0)*( -(a**2-1.0)/r + r*(1.0/alpha**2+1.0)*a**2*phi**2+ pi**2 )
+    dalphadr = alpha/(2.0) * ( (a**2-1.0)/r + r*(1.0/alpha**2 - 1.0)*a**2*phi**2+pi**2 ) 
     dphidr = pi 
-    dpidr = - ( 1.0 + a**2 - 4.0*np.pi*r**2*a**2*m**2*phi**2)*pi/r - ( 1.0/alpha**2-m**2)*phi*a**2
+    dpidr = - ( 1.0 + a**2 - r**2*a**2*phi**2)*pi/r - ( 1.0/alpha**2-1.0)*phi*a**2
 
     dydr = [dadr,dalphadr,dphidr,dpidr]
     return dydr
