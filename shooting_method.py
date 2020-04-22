@@ -84,42 +84,37 @@ def radial_walker(alpha0_guess,phi0,rstart,rend,deltaR,N):
     
     return alpha0[0]
 
-# We want to evaluate the system on 30 linearly
-# spaced times between t=0 and t=3.
+####################################################################################################
 
-
- 
-#phi0 = 0.13    
 # Resolution of diff eqn 
 Rstart = 4
 Rend = 20
 deltaR = 1
 N = 100000
-
-alpha0 = radial_walker(0.72,phi0,Rstart,Rend,deltaR,N)
-
-# Root finding ( values for which 
+alpha0_guess=0.72
+phi0_start=0.11
+phi0_end=0.14
+dphi0=0.01
 
 r = np.linspace(1e-10, Rend, N)
 
-for phi0 in np.arange(0.11,0.14,0.01):
-    y0 = [1, alpha0 ,phi0,0]
-    sol = spi.odeint(eqns, y0, r)
-    print(sol)
+for phi0 in np.arange(phi0_start,phi0_end,dphi0):
+	print("Shoot starting from central phi0 value:",phi0)
+	alpha0 = radial_walker(alpha0_guess,phi0,Rstart,Rend,deltaR,N)
+	y0 = [1, alpha0 ,phi0,0]
+	sol = spi.odeint(eqns, y0, r)
     
-a = sol[:, 0]
-alpha = sol[:, 1]
-phi = sol[:, 2]+1
-M = r / 2.0*(a**2 - 1.0) / a**2
+	a = sol[:, 0]
+	alpha = sol[:, 1]
+	phi = sol[:, 2]+1
+	M = r / 2.0*(a**2 - 1.0) / a**2
 
+	plt.plot(r, a, color='b', label='a(r)')
+	plt.plot(r, M, color='y', label='M(r)')
+	plt.plot(r, alpha, color='g', label='alpha(r)')
+	plt.plot(r, phi, color='r', label='phi(r)')
+	plt.legend(loc='best')
+	plt.xlabel('r')
+	plt.grid()
 
-plt.plot(r, a, 'b', label='a(r)')
-plt.plot(r, M, 'y', label='M(r)')
-plt.plot(r, alpha, 'g', label='alpha(r)')
-plt.plot(r, phi, 'r', label='phi(r)')
-plt.legend(loc='best')
-plt.xlabel('r')
-plt.grid()
-
-
-plt.savefig("solution.png")
+plt.savefig("solution_phi10_" + str(phi0_start) + "-" + str(phi0_end) + ".png")
