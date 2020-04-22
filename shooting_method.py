@@ -3,12 +3,14 @@ import scipy.integrate as spi
 import scipy.optimize as opi
 import matplotlib.pyplot as plt
 
+
+
 def eqns(y, r):
     """ Differential equation for scalar fields 
 
     Parameters:
         y (list with reals): current status vector ( a(r), alpha(r), phi(r), pi(r) ) 
-		r (real) : current position 
+		r (real) : current radial position 
 
     Returns:
         dydr (list with reals): derivative of y with respect to r 
@@ -24,79 +26,90 @@ def eqns(y, r):
     dydr = [dadr,dalphadr,dphidr,dpidr]
     return dydr
 
-# solve
 
-def shoot(alpha0_guess,phi0,r):
-    """ Solved differential equation for shooting process.
 
-    Parameters:
-        alpha0_guess (real): The lapse value guess at r = rmin 
-		phi0 (real) : The phi value at r = rmin
+def shoot(alphac,phic,r):
+	""" differential equations to be solved for shooting process
+	
+	Parameters:
+	    alphac (real): lapse value at r = rmin 
+		phic (real): scalar field value at r = rmin
+		r (list with reals): list of radial positions
+	
+	Returns:
+	    phi_end (real): scalar field value at r = rmax    
+	
+	"""
+	
+	# Boundary conditions at r = rmin i.e. Eq (41),(42),(43) in 1202.5809
+	yc = [1, alphac, phic, 0]
+	# Solve differential equations 
+	sol = spi.odeint(eqns, yc, r)
+	phi_end = sol[-1,2]
 
-    Returns:
-        phi_end (real):. The phi value at r = rmax    
+	return phi_end
 
-    """
-    
-    # Define initial data vector 
-    y0 = [1, alpha0_guess,phi0,0]
-    # Solve differential equaion 
-    sol = spi.odeint(eqns, y0, r)
-    phi_end = sol[-1,2]	
-    
-    return phi_end
 
-def radial_walker(alpha0_guess,phi0,rstart,rend,deltaR,N): 
-    """ Performs shooting for multiple radii rmax shooting process.
 
-    Parameters:
-        alpha0_guess (real) : alpha guess for rmin calculation 
-        phi0 (real) : phi value at r = 0 
-        rstart (real) : first rmax for which shooting is performed
+def radial_walker(alphac_guess,phic,rstart,rend,deltaR,N): 
+	""" Performs shooting for multiple radii rmax shooting process.
+	
+	Parameters:
+	    alphac_guess (real) : initial guess for the lapse value at r = rmin
+	    phic (real) : scalar field value at r = 0 
+	    rstart (real) : first rmax for which shooting is performed
 		rend (real) : maximum rmax for which shooting is performed
 		deltaR (real) : stelpsize
 		N (real) : number of gridpoints 
-
-    Returns:
-        alpha0 (real):. alpha0 at r = rmin 
-    """
-
-    eps = 1e-10 # distance from zero
-    range_list = np.arange(rstart,rend,deltaR)
-    alpha0 = alpha0_guess
-    #print(range_list)
-    #print(alpha0_guess)
-    for R in range_list:
-        r = np.linspace(eps, R, N)
-        #print(r)
-        fun = lambda x: shoot(x,phi0,r)
-        root = opi.root(fun,alpha0)
-        alpha0 = root.x 
-
-        print("step ",R)
-        print("alpha0 ",alpha0)
+	
+	Returns:
+	    alphac (real):. alphac at r = rmin 
+	"""
+	
+	eps = 1e-10 # distance from zero
+	range_list = np.arange(rstart,rend,deltaR)
+	alphac = alphac_guess
+	#print(range_list)
+	#print(alphac_guess)
+	for R in range_list:
+		r = np.linspace(eps, R, N)
+		
+		# Boundary condition at r = rmax i.e. Eq (44) in 1202.5809
+		fun = lambda x: shoot(x,phic,r)
+		root = opi.root(fun,alphac)
+		alphac = root.x 
+		
+		print("step ",R)
+		print("alphac ",alphac)
     
-    return alpha0[0]
+	return alphac[0]
+
+
 
 ####################################################################################################
 
-# Resolution of diff eqn 
+
+
+# runtime parameters
 Rstart = 4
 Rend = 20
 deltaR = 1
 N = 100000
-alpha0_guess=0.72
-phi0_start=0.11
-phi0_end=0.14
-dphi0=0.01
+alphac_guess=0.72
+phic_start=0.11
+phic_end=0.14
+dphic=0.01
 
 r = np.linspace(1e-10, Rend, N)
 
-for phi0 in np.arange(phi0_start,phi0_end,dphi0):
-	print("Shoot starting from central phi0 value:",phi0)
-	alpha0 = radial_walker(alpha0_guess,phi0,Rstart,Rend,deltaR,N)
-	y0 = [1, alpha0 ,phi0,0]
-	sol = spi.odeint(eqns, y0, r)
+for phic in np.arange(phic_start,phic_end,dphic):
+	print("Shoot starting from central phic value:",phic)
+	alphac = radial_walker(alphac_guess,phic,Rstart,Rend,deltaR,N)
+
+    # Boundary conditions at r = rmin i.e. Eq (41),(42),(43) in 1202.5809
+	yc = [1, alphac ,phic,0]
+    # Solve differential equations
+	sol = spi.odeint(eqns, yc, r)
     
 	a = sol[:, 0]
 	alpha = sol[:, 1]
@@ -111,4 +124,4 @@ for phi0 in np.arange(phi0_start,phi0_end,dphi0):
 	plt.xlabel('r')
 	plt.grid()
 
-plt.savefig("solution_phi10_" + str(phi0_start) + "-" + str(phi0_end) + ".png")
+plt.savefig("solution_phi10_" + str(phic_start) + "-" + str(phic_end) + ".png")
