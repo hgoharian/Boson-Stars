@@ -20,7 +20,7 @@ def eqns(y, r):
     m = 1 
     a, alpha, phi, pi = y
 
-    omega = 1
+    omega = 2
     
     dadr = a/(2.0)*( -(a**2-1.0)/r + 4.0*np.pi*r*(1.0/alpha**2+m**2)*a**2*phi**2+ pi**2 )
     dalphadr = alpha/(2.0) * ( (a**2-1.0)/r + 4.0*np.pi*r*(1.0/alpha**2 - m**2)*a**2*phi**2+pi**2 ) 
@@ -106,7 +106,7 @@ for phi0 in np.arange(phi0_start,phi0_end,dphi0):
     
 	a = sol[:, 0]
 	alpha = sol[:, 1]
-	phi = sol[:, 2]+1
+	phi = sol[:, 2]
 	M = r / 2.0*(a**2 - 1.0) / a**2
 
 	plt.plot(r, a, color='b', label='a(r)')
