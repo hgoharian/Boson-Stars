@@ -1,9 +1,6 @@
 import numpy as np
 import scipy.integrate as spi
 import scipy.optimize as opi
-import matplotlib 
-import csv
-
 import matplotlib.pyplot as plt
 
 def eqns(y, r):
@@ -11,10 +8,10 @@ def eqns(y, r):
 
     Parameters:
         y (list with reals): current status vector ( a(r), alpha(r), phi(r), pi(r) ) 
-	r (real) : current position 
+		r (real) : current position 
 
     Returns:
-        dydr (list with reals): derivative for y in r 
+        dydr (list with reals): derivative of y with respect to r 
 
     """
     a, alpha, phi, pi = y
@@ -34,7 +31,7 @@ def shoot(alpha0_guess,phi0,r):
 
     Parameters:
         alpha0_guess (real): The lapse value guess at r = rmin 
-	phi0 (real) : The phi value at r = rmin
+		phi0 (real) : The phi value at r = rmin
 
     Returns:
         phi_end (real):. The phi value at r = rmax    
@@ -56,9 +53,9 @@ def radial_walker(alpha0_guess,phi0,rstart,rend,deltaR,N):
         alpha0_guess (real) : alpha guess for rmin calculation 
         phi0 (real) : phi value at r = 0 
         rstart (real) : first rmax for which shooting is performed
-	rend (real) : maximum rmax for which shooting is performed
-	deltaR (real) : stelpsize
-	N (real) : number of gridpoints 
+		rend (real) : maximum rmax for which shooting is performed
+		deltaR (real) : stelpsize
+		N (real) : number of gridpoints 
 
     Returns:
         alpha0 (real):. alpha0 at r = rmin 
