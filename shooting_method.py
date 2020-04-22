@@ -61,7 +61,7 @@ def radial_walker(alpha0_guess,phi0,rstart,rend,deltaR,N):
 	N (real) : number of gridpoints 
 
     Returns:
-        alpha0 (real):. alpha0 for rmax   
+        alpha0 (real):. alpha0 at r = rmin 
     """
 
     eps = 1e-10 # distance from zero
