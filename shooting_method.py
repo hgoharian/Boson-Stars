@@ -7,14 +7,11 @@ import matplotlib.pyplot as plt
 
 def eqns(y, r):
     """ Differential equation for scalar fields 
-
     Parameters:
         y (list with reals): current status vector ( a(r), alpha(r), phi(r), pi(r) ) 
 		r (real) : current radial position 
-
     Returns:
         dydr (list with reals): derivative of y with respect to r 
-
     """
     a, alpha, phi, pi = y
 
@@ -42,6 +39,7 @@ def shoot(alphac,phic,r):
 	"""
 	
 	# Boundary conditions at r = rmin i.e. Eq (41),(42),(43) in 1202.5809
+	#y(a(r), alpha(r), phi(0), Pi(0)):
 	yc = [1, alphac, phic, 0]
 	# Solve differential equations 
 	sol = spi.odeint(eqns, yc, r)
@@ -59,7 +57,7 @@ def radial_walker(alphac_guess,phic,rstart,rend,deltaR,N):
 	    phic (real) : scalar field value at r = 0 
 	    rstart (real) : first rmax for which shooting is performed
 		rend (real) : maximum rmax for which shooting is performed
-		deltaR (real) : stelpsize
+		deltaR (real) : stepsize
 		N (real) : number of gridpoints 
 	
 	Returns:
@@ -96,12 +94,17 @@ Rend = 20
 deltaR = 1
 N = 100000
 alphac_guess=0.72
-phic_start=0.11
-phic_end=0.14
+phic_start=0.14
+phic_end=0.18
 dphic=0.01
+
+fig, ax = plt.subplots()
+lines = []
+styles = ['-','--','-.',':']
 
 r = np.linspace(1e-10, Rend, N)
 
+#dummy_lines = []
 for phic in np.arange(phic_start,phic_end,dphic):
 	print("Shoot starting from central phic value:",phic)
 	alphac = radial_walker(alphac_guess,phic,Rstart,Rend,deltaR,N)
@@ -115,13 +118,14 @@ for phic in np.arange(phic_start,phic_end,dphic):
 	alpha = sol[:, 1]
 	phi = sol[:, 2]
 	M = r / 2.0*(a**2 - 1.0) / a**2
+	
 
-	plt.plot(r, a, color='b', label='a(r)')
-	plt.plot(r, M, color='y', label='M(r)')
-	plt.plot(r, alpha, color='g', label='alpha(r)')
-	plt.plot(r, phi, color='r', label='phi(r)')
-	plt.legend(loc='best')
+	plt.plot(r, a, color='b', label='')#a(r)
+	plt.plot(r, M, color='y', label='')#M(r)
+	plt.plot(r, alpha, color='g',label='')#alpha(r)
+	plt.plot(r, phi, color='r', label='')#phi(r) 
+	plt.legend(loc='lower center')
 	plt.xlabel('r')
-	plt.grid()
+	#plt.grid()
 
 plt.savefig("solution_phi10_" + str(phic_start) + "-" + str(phic_end) + ".png")
