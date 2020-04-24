@@ -98,13 +98,10 @@ phic_start=0.14
 phic_end=0.18
 dphic=0.01
 
-fig, ax = plt.subplots()
-lines = []
-styles = ['-','--','-.',':']
 
 r = np.linspace(1e-10, Rend, N)
 
-#dummy_lines = []
+
 for phic in np.arange(phic_start,phic_end,dphic):
 	print("Shoot starting from central phic value:",phic)
 	alphac = radial_walker(alphac_guess,phic,Rstart,Rend,deltaR,N)
@@ -122,11 +119,11 @@ for phic in np.arange(phic_start,phic_end,dphic):
 	f0=1+(phic_start-phic)/(phic_end-phic_start)/2.0
 	print('f0=',f0)
 
-	plt.plot(r, a, color=(0,0,f0,1), label='a(r)')#a(r)
-	plt.plot(r, M, color=(0,f0,0,1), label='M(r)')#M(r)
-	plt.plot(r, alpha, color=(0,f0,f0,1),label='alpha(r)')#alpha(r)
-	plt.plot(r, phi, color=(f0,0,0,1), label='phi(r)')#phi(r) 
+	plt.plot(r, a, color=(0,f0,0,1), label='a(r)')#a(r)
+	plt.plot(r, M, color=(0,f0,f0,1), label='M(r)')#M(r)
+	plt.plot(r, alpha, color=(f0,0,0,1),label='alpha(r)')#alpha(r)
+	plt.plot(r, phi, color=(f0,f0,0,1), label='phi(r)')#phi(r) 
 	plt.xlabel('r')
-	#plt.grid()
+	plt.grid()
 
 plt.savefig("solution_phi10_" + str(phic_start) + "-" + str(phic_end) + ".png")
