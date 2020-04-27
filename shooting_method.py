@@ -15,6 +15,7 @@ def eqns(y, r):
     """
     a, alpha, phi, pi = y
 
+    #Eqns (8.9),(8.10),(8.11):
     dadr = a/(2.0)*( -(a**2-1.0)/r + r*(1.0/alpha**2+1.0)*a**2*phi**2+ pi**2 )
     dalphadr = alpha/(2.0) * ( (a**2-1.0)/r + r*(1.0/alpha**2 - 1.0)*a**2*phi**2+pi**2 ) 
     dphidr = pi 
@@ -38,7 +39,7 @@ def shoot(alphac,phic,r):
 	
 	"""
 	
-	# Boundary conditions at r = rmin i.e. Eq (41),(42),(43) in 1202.5809
+	# Boundary conditions at r = rmin i.e. Eq (8.12),(8.13),(8.14) 
 	#y(a(r), alpha(r), phi(0), Pi(0)):
 	yc = [1, alphac, phic, 0]
 	# Solve differential equations 
@@ -72,8 +73,8 @@ def radial_walker(alphac_guess,phic,rstart,rend,deltaR,N):
 	for R in range_list:
 		r = np.linspace(eps, R, N)
 		
-		# Boundary condition at r = rmax i.e. Eq (44) in 1202.5809
-		fun = lambda x: shoot(x,phic,r)
+		# Boundary condition at r = rmax i.e. Eq (8.15)
+		fun = lambda x: shoot(x,phic,r) #fun is for function, takes alpha_guess in and spits out the value of phi at rmax, takes in an alpha and spits out phi at r->infty
 		root = opi.root(fun,alphac)
 		alphac = root.x 
 		
@@ -106,7 +107,7 @@ for phic in np.arange(phic_start,phic_end,dphic):
 	print("Shoot starting from central phic value:",phic)
 	alphac = radial_walker(alphac_guess,phic,Rstart,Rend,deltaR,N)
 
-    # Boundary conditions at r = rmin i.e. Eq (41),(42),(43) in 1202.5809
+    # Boundary conditions at r = rmin i.e. Eq (8.12),(8.13),(8.14)
 	yc = [1, alphac ,phic,0]
     # Solve differential equations
 	sol = spi.odeint(eqns, yc, r)
