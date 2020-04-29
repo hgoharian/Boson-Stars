@@ -118,12 +118,11 @@ for phic in np.arange(phic_start,phic_end,dphic):
 	M = r / 2.0*(a**2 - 1.0) / a**2
 	
 	f0=1+(phic_start-phic)/(phic_end-phic_start)/2.0
-	print('f0=',f0)
 
-	plt.plot(r, a, color=(0,f0,0,1), label='a(r)')#a(r)
-	plt.plot(r, M, color=(0,f0,f0,1), label='M(r)')#M(r)
-	plt.plot(r, alpha, color=(f0,0,0,1),label='alpha(r)')#alpha(r)
-	plt.plot(r, phi, color=(f0,f0,0,1), label='phi(r)')#phi(r) 
+	plt.plot(r, a, color=(0,f0,0,1), label='a(r)')
+	plt.plot(r, M, color=(0,f0,f0,1), label='M(r)')
+	plt.plot(r, alpha, color=(f0,0,0,1),label='alpha(r)')
+	plt.plot(r, phi, color=(f0,f0,0,1), label='phi(r)')
 	plt.xlabel('r')
 	plt.grid()
 
