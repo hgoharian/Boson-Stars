@@ -106,7 +106,8 @@ r = np.linspace(1e-10, Rend, N)
 for phic in np.arange(phic_start,phic_end,dphic):
 	print("Shoot starting from central phic value:",phic)
 	alphac = radial_walker(alphac_guess,phic,Rstart,Rend,deltaR,N)
-
+	
+	
     # Boundary conditions at r = rmin i.e. Eq (8.12),(8.13),(8.14)
 	yc = [1, alphac ,phic,0]
     # Solve differential equations
@@ -116,16 +117,18 @@ for phic in np.arange(phic_start,phic_end,dphic):
 	alpha = sol[:, 1]
 	phi = sol[:, 2]
 	M = r / 2.0*(a**2 - 1.0) / a**2
+	print(M)
 	
 	f0=1+(phic_start-phic)/(phic_end-phic_start)/2.0
 
-    # output frequency omega according to (8.16) and rescaling \tilde{\alpha}=(m/omega)\alpha
+	# output frequency omega according to (8.16) and rescaling \tilde{\alpha}=(m/omega)\alpha
 	print("frequency:",1./a[N-1]/alpha[N-1])
 
 	plt.plot(r, a, color=(0,f0,0,1), label='a(r)')
 	plt.plot(r, M, color=(0,f0,f0,1), label='M(r)')
 	plt.plot(r, alpha, color=(f0,0,0,1),label='alpha(r)')
 	plt.plot(r, phi, color=(f0,f0,0,1), label='phi(r)')
+
 	plt.xlabel('r')
 	plt.grid()
 
