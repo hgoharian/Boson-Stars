@@ -95,8 +95,8 @@ Rend = 20
 deltaR = 1
 N = 100000
 alphac_guess=0.72
-phic_start=0.14
-phic_end=0.18
+phic_start=0.20
+phic_end=0.23
 dphic=0.01
 
 
