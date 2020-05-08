@@ -117,12 +117,13 @@ for phic in np.arange(phic_start,phic_end,dphic):
 	alpha = sol[:, 1]
 	phi = sol[:, 2]
 	M = r / 2.0*(a**2 - 1.0) / a**2
-	print(M)
+	
 	
 	f0=1+(phic_start-phic)/(phic_end-phic_start)/2.0
 
 	# output frequency omega according to (8.16) and rescaling \tilde{\alpha}=(m/omega)\alpha
 	print("frequency:",1./a[N-1]/alpha[N-1])
+	print("mass:",M[N-1])
 
 	plt.plot(r, a, color=(0,f0,0,1), label='a(r)')
 	plt.plot(r, M, color=(0,f0,f0,1), label='M(r)')
