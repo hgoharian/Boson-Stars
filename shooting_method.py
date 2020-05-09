@@ -97,7 +97,7 @@ N = 100000
 alphac_guess=0.72
 phic_start=0.1
 phic_end=0.50
-dphic=0.05
+dphic=0.1
 
 r = np.linspace(1e-10, Rend, N)
 freq_phic = []
