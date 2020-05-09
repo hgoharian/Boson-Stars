@@ -95,18 +95,16 @@ Rend = 20
 deltaR = 1
 N = 100000
 alphac_guess=0.72
-phic_start=0.20
-phic_end=0.23
-dphic=0.01
-
+phic_start=0.1
+phic_end=0.5
+dphic=0.05
 
 r = np.linspace(1e-10, Rend, N)
-
+mass_phic = []
 
 for phic in np.arange(phic_start,phic_end,dphic):
 	print("Shoot starting from central phic value:",phic)
 	alphac = radial_walker(alphac_guess,phic,Rstart,Rend,deltaR,N)
-	
 	
     # Boundary conditions at r = rmin i.e. Eq (8.12),(8.13),(8.14)
 	yc = [1, alphac ,phic,0]
@@ -117,20 +115,31 @@ for phic in np.arange(phic_start,phic_end,dphic):
 	alpha = sol[:, 1]
 	phi = sol[:, 2]
 	M = r / 2.0*(a**2 - 1.0) / a**2
-	
-	
-	f0=1+(phic_start-phic)/(phic_end-phic_start)/2.0
+
+	# update list of total mass for each phic
+	mass_phic.append(M[N-1])
 
 	# output frequency omega according to (8.16) and rescaling \tilde{\alpha}=(m/omega)\alpha
 	print("frequency:",1./a[N-1]/alpha[N-1])
 	print("mass:",M[N-1])
 
+	# color function
+	f0=1+(phic_start-phic)/(phic_end-phic_start)/2.0
+
+	# plot for each phic
 	plt.plot(r, a, color=(0,f0,0,1), label='a(r)')
 	plt.plot(r, M, color=(0,f0,f0,1), label='M(r)')
 	plt.plot(r, alpha, color=(f0,0,0,1),label='alpha(r)')
 	plt.plot(r, phi, color=(f0,f0,0,1), label='phi(r)')
-
 	plt.xlabel('r')
 	plt.grid()
 
+# plot functions of r 
 plt.savefig("solution_phi10_" + str(phic_start) + "-" + str(phic_end) + ".png")
+
+# plot functions of phic 
+plt.clf()
+plt.plot(np.arange(phic_start,phic_end,dphic),mass_phic)
+plt.xlabel('mass')
+plt.grid()
+plt.savefig("total_mass_phi10_" + str(phic_start) + "-" + str(phic_end) + ".png")
