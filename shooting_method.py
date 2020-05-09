@@ -96,10 +96,11 @@ deltaR = 1
 N = 100000
 alphac_guess=0.72
 phic_start=0.1
-phic_end=0.5
+phic_end=0.50
 dphic=0.05
 
 r = np.linspace(1e-10, Rend, N)
+freq_phic = []
 mass_phic = []
 
 for phic in np.arange(phic_start,phic_end,dphic):
@@ -116,7 +117,8 @@ for phic in np.arange(phic_start,phic_end,dphic):
 	phi = sol[:, 2]
 	M = r / 2.0*(a**2 - 1.0) / a**2
 
-	# update list of total mass for each phic
+	# update lists of frequency and total mass for each phic
+	freq_phic.append(1./a[N-1]/alpha[N-1])
 	mass_phic.append(M[N-1])
 
 	# output frequency omega according to (8.16) and rescaling \tilde{\alpha}=(m/omega)\alpha
@@ -137,9 +139,18 @@ for phic in np.arange(phic_start,phic_end,dphic):
 # plot functions of r 
 plt.savefig("solution_phi10_" + str(phic_start) + "-" + str(phic_end) + ".png")
 
-# plot functions of phic 
+# plot frequency as a function of phic 
+plt.clf()
+plt.plot(np.arange(phic_start,phic_end,dphic),freq_phic)
+plt.xlabel('phic')
+plt.ylabel('frequency')
+plt.grid()
+plt.savefig("freq_phi10_" + str(phic_start) + "-" + str(phic_end) + ".png")
+
+# plot mass as a function of phic 
 plt.clf()
 plt.plot(np.arange(phic_start,phic_end,dphic),mass_phic)
-plt.xlabel('mass')
+plt.xlabel('phic')
+plt.ylabel('mass')
 plt.grid()
 plt.savefig("total_mass_phi10_" + str(phic_start) + "-" + str(phic_end) + ".png")
