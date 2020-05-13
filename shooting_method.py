@@ -100,6 +100,7 @@ phic_end=0.50
 dphic=0.1
 
 r = np.linspace(1e-10, Rend, N)
+#set feq_phic and mass_phic as empty lists
 freq_phic = []
 mass_phic = []
 
