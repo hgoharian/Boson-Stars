@@ -68,13 +68,11 @@ def radial_walker(alphac_guess,phic,rstart,rend,deltaR,N):
 	eps = 1e-10 # distance from zero
 	range_list = np.arange(rstart,rend,deltaR)
 	alphac = alphac_guess
-	#print(range_list)
-	#print(alphac_guess)
 	for R in range_list:
 		r = np.linspace(eps, R, N)
 		
 		# Boundary condition at r = rmax i.e. Eq (8.15)
-		fun = lambda x: shoot(x,phic,r) #fun is for function, takes alpha_guess in and spits out the value of phi at rmax, takes in an alpha and spits out phi at r->infty
+		fun = lambda x: shoot(x,phic,r) #fun is for function, takes alpha_guess in and spits out the value of phi at rmax
 		root = opi.root(fun,alphac)
 		alphac = root.x 
 		
@@ -93,7 +91,7 @@ def radial_walker(alphac_guess,phic,rstart,rend,deltaR,N):
 Rstart = 4
 Rend = 20
 deltaR = 1
-N = 100000
+N = 400000
 alphac_guess=0.72
 phic_start=0.1
 phic_end=0.50
